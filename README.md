@@ -12,11 +12,29 @@ to build the executable for the webserver.
 
 Run the website with:
 ```console
-foo@bar:~$ stack exec myproj-exe 
+foo@bar:~$ stack exec myproj-exe
 ```
 
 You can view the website locally at: localhost:8080
 
+To install Stack on Unix operating systems (including MacOS), run:
+```console
+curl -sSL https://get.haskellstack.org/ | sh
+```
+or
+```console
+wget -qO- https://get.haskellstack.org/ | sh
+```
 
+After installation, running stack setup might fail with configure: error: cannot run C compiled programs. in which case you should run:
+```console
+xcode-select --install
+```
+Starting with macOs 10.14 (Mojave) running `xcode-select --install` might not be enough. You will need to install additional headers by running:
+```console
+cd /Library/Developer/CommandLineTools/Packages/
+open macOS_SDK_headers_for_macOS_10.14.pkg
+```
 
-
+For further queries for specific Linux Distributions see the Stack install page:
+https://docs.haskellstack.org/en/stable/install_and_upgrade/
