@@ -17,6 +17,8 @@ foo@bar:~$ stack exec myproj-exe
 
 You can view the website locally at: localhost:8080
 
+### Installing Stack
+
 To install Stack on Unix operating systems (including MacOS), run:
 ```console
 foo@bar:~$ curl -sSL https://get.haskellstack.org/ | sh
