@@ -13,10 +13,10 @@ import Network.Wai.Handler.Warp
 import Servant
 
 data User = User
-  { userName :: Text
-  , userEmail :: Text
+  { userName :: String
+  , userEmail :: String
   , userAge :: Int
-  , userOccupation :: Text
+  , userOccupation :: String
   } deriving (Eq, Show)
 
 $(deriveJSON defaultOptions ''User)
@@ -36,6 +36,6 @@ server :: Server API
 server = return users
 
 users :: [User]
-users = [ User 1 "Isaac" "Newton"
-        , User 2 "Albert" "Einstein"
+users = [ -- User 1 "Isaac" "Newton"
+        -- , User 2 "Albert" "Einstein"
         ]
