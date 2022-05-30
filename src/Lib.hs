@@ -12,6 +12,9 @@ import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
 
+import Text.Printf
+
+
 data User = User
   { userName :: String
   , userEmail :: String
@@ -24,7 +27,13 @@ $(deriveJSON defaultOptions ''User)
 type API = "users" :> Get '[JSON] [User]
 
 startApp :: IO ()
-startApp = run 8080 app
+startApp = do
+  putStrLn "Starting web server..."
+  withApplication (pure app) $ \port -> do
+        putStrLn $ printf "Started on http://localhost:%d" port
+        putStrLn "Press enter to quit."
+        ch <- getChar
+        print ch
 
 app :: Application
 app = serve api server
