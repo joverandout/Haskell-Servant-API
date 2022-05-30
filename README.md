@@ -15,7 +15,7 @@ Run the website with:
 foo@bar:~$ stack exec myproj-exe
 ```
 
-You can view the website locally at: localhost:[port number], It uses a randomised port number each time, you can see where it is running in the terminal, you will get a message like this. You can just click the link rather than type out the url.
+You can view the website locally at `localhost:[port number]`, It uses a randomised port number each time, you can see where it is running in the terminal, you will get a message like this. You can just click the link rather than type out the url.
 ```console
 Starting web server...
 Started on http://localhost:43873
