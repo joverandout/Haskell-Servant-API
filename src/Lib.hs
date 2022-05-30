@@ -30,7 +30,7 @@ startApp :: IO ()
 startApp = do
   putStrLn "Starting web server..."
   withApplication (pure app) $ \port -> do
-        putStrLn $ printf "Started on http://localhost:%d" port
+        putStrLn $ printf "Started on http://localhost:%d (CMD Click)" port
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
