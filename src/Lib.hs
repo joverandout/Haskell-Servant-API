@@ -12,6 +12,8 @@ import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
 
+import System.FilePath
+
 import Text.Printf
 
 

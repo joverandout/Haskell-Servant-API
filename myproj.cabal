@@ -39,6 +39,7 @@ library
     , warp
     , time
     , text
+    , filepath
   default-language: Haskell2010
 
 executable myproj-exe
