@@ -22,7 +22,48 @@ Started on http://localhost:43873
 Press enter to quit.
 ```
 
-### Installing Stack
+## Testing
+
+Testing can be done manually with `curl`:
+
+```console
+foo@bar:~$ curl http://localhost:[port]/users
+```
+Returning JSON can then be manually verified:
+```console
+[{"userName":"Isaac Newton","userEmail":"isaac@newton.co.uk","userAge":372,"userOccupation":"apple guy"},{"userName":"Albert Einstein","userEmail":"ae@mc2.org","userAge":136,"userOccupation":"moustache man"},{"userName":"Joe Moore","userEmail":"Joe@gmail.com","userAge":21,"userOccupation":"club legend"}]%                         
+```
+This can be done for any of the API routes which are denoted by:
+
+```
+type UserAPI = "users" :> Get '[JSON] [User]
+           :<|> "albert" :> Get '[JSON] User
+           :<|> "isaac" :> Get '[JSON] User
+           :<|> "testUsers" :> Get '[JSON] [User]
+```
+
+A simple unit test has been constructed with more planned with increased functionality. To run automatic unit testing, run:
+
+```console
+foo@bar:~$ stack test
+```
+To give the following result:
+```console
+myproj> test (suite: myproj-test)
+                    
+
+GET /testUsers
+  responds with 200 [✔]
+  responds with [User] [✔]
+
+Finished in 0.0015 seconds
+2 examples, 0 failures
+
+myproj> Test suite myproj-test passed
+Completed 2 action(s).
+```
+
+## Installing Stack
 
 To install Stack on Unix operating systems (including MacOS), run:
 ```console
