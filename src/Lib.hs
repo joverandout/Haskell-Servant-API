@@ -26,6 +26,10 @@ $(deriveJSON defaultOptions ''User)
 
 type API = "users" :> Get '[JSON] [User]
 
+type UserAPI2 = "users" :> Get '[JSON] [User]
+           :<|> "albert" :> Get '[JSON] User
+           :<|> "isaac" :> Get '[JSON] User
+
 startApp :: IO ()
 startApp = do
   putStrLn "Starting web server..."
@@ -36,15 +40,27 @@ startApp = do
         print ch
 
 app :: Application
-app = serve api server
+app = serve userAPI2 server2
 
-api :: Proxy API
-api = Proxy
+userAPI2 :: Proxy UserAPI2
+userAPI2 = Proxy
 
 server :: Server API
 server = return users
 
 users :: [User]
-users = [ User "Joe Moore" "Joe@gmail.com" 21 "Club legend"
-        -- , User 2 "Albert" "Einstein"
-        ]
+users = [ User "Joe Moore" "Joe@gmail.com" 21 "Club legend"]
+
+isaac :: User
+isaac = User "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
+
+albert :: User
+albert = User "Albert Einstein" "ae@mc2.org" 136 "moustache man"
+
+users2 :: [User]
+users2 = [isaac, albert]
+
+server2 :: Server UserAPI2
+server2 = return users
+     :<|> return albert
+     :<|> return isaac
