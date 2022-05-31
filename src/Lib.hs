@@ -46,10 +46,10 @@ userAPI2 :: Proxy UserAPI2
 userAPI2 = Proxy
 
 server :: Server API
-server = return users
+server = return users2
 
-users :: [User]
-users = [ User "Joe Moore" "Joe@gmail.com" 21 "Club legend"]
+joe :: User
+joe = User "Joe Moore" "Joe@gmail.com" 21 "Club legend"
 
 isaac :: User
 isaac = User "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
@@ -58,9 +58,9 @@ albert :: User
 albert = User "Albert Einstein" "ae@mc2.org" 136 "moustache man"
 
 users2 :: [User]
-users2 = [isaac, albert]
+users2 = [isaac, albert, joe]
 
 server2 :: Server UserAPI2
-server2 = return users
+server2 = return users2
      :<|> return albert
      :<|> return isaac
