@@ -49,7 +49,7 @@ server :: Server API
 server = return users2
 
 joe :: User
-joe = User "Joe Moore" "Joe@gmail.com" 21 "Club legend"
+joe = User "Joe Moore" "Joe@gmail.com" 21 "club legend"
 
 isaac :: User
 isaac = User "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
