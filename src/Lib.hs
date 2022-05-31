@@ -29,6 +29,7 @@ $(deriveJSON defaultOptions ''User)
 type UserAPI = "users" :> Get '[JSON] [User]
            :<|> "albert" :> Get '[JSON] User
            :<|> "isaac" :> Get '[JSON] User
+           :<|> "testUsers" :> Get '[JSON] [User]
 
 startApp :: IO ()
 startApp = do
@@ -58,7 +59,12 @@ albert = User "Albert Einstein" "ae@mc2.org" 136 "moustache man"
 users :: [User]
 users = [isaac, albert, joe]
 
+-- used for unit tests
+testUsers :: [User]
+testUsers = [isaac, albert, joe]
+
 server :: Server UserAPI
 server = return users
      :<|> return albert
      :<|> return isaac
+     :<|> return testUsers
