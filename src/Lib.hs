@@ -7,7 +7,6 @@
 module Lib
     ( startApp
     , app
-    , newCounter
     ) where
 
 import Data.Aeson
