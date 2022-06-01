@@ -13,7 +13,9 @@ import GHC.Conc
 import Control.Monad.IO.Class
 
 main :: IO ()
-main = hspec spec
+main = do
+    counter <- newCounter
+    hspec (spec $ Just counter)
 
 counterOne :: Counter
 counterOne = Counter 1
@@ -22,9 +24,9 @@ counterOne = Counter 1
 -- testCounter counterOne = TVar counterOne
 -- I WANT TO MAKE A NEW TVAR COUNTER BUT CANNOT!
 
-spec :: Spec
-spec = do
-    with (return $ app Nothing) $ do
+spec :: Maybe (TVar Counter) -> Spec
+spec counter = do
+    with (return $ app counter) $ do
         describe "GET /testUsers" $ do
             it "responds with 200" $ do
                 get "/testUsers" `shouldRespondWith` 200
