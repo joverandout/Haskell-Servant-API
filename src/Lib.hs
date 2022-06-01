@@ -7,6 +7,7 @@
 module Lib
     ( startApp
     , app
+    , newCounter
     ) where
 
 import Data.Aeson
@@ -25,6 +26,7 @@ import GHC.Conc
 import Control.Monad.IO.Class
 
 import System.FilePath
+import Data.Maybe
 
 
 data User = User
@@ -78,13 +80,13 @@ startApp = do
   putStrLn "Starting web server..."
   writeJSForAPI userAPI vanillaJS (www </> "api.js")
   counter <- newCounter
-  withApplication (pure $ app counter) $ \port -> do
+  withApplication (pure $ app (Just counter)) $ \port -> do
         putStrLn $ printf "Started on http://localhost:%d (CMD Click)" port
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
 
-app :: TVar Counter -> Application
+app :: Maybe (TVar Counter) -> Application
 app counter = serve userAPI' $ server' counter
 
 -- func to return the proxy element of the api data type
@@ -116,15 +118,15 @@ www :: FilePath
 www = "static"
 
 -- returns the paths of the api, with the json objects that they
-server :: TVar Counter -> Server UserAPI
+server :: Maybe (TVar Counter) -> Server UserAPI
 server counter = return users
      :<|> return albert
      :<|> return isaac
      :<|> return testUsers
-     :<|> increaseCounter counter
-     :<|> currentCounter counter
+     :<|> increaseCounter (fromJust counter)
+     :<|> currentCounter (fromJust counter)
 
-server' :: TVar Counter -> Server UserAPI'
+server' :: Maybe (TVar Counter) -> Server UserAPI'
 server' counter = server counter
     :<|> serveDirectoryFileServer www
 
