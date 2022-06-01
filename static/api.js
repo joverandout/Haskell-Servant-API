@@ -19,6 +19,7 @@ var getUsers = function(onSuccess, onError) {
   };
   xhr.send(null);
 };
+
 var getAlbert = function(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/albert', true);
@@ -39,6 +40,7 @@ var getAlbert = function(onSuccess, onError) {
   };
   xhr.send(null);
 };
+
 var getIsaac = function(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/isaac', true);
@@ -59,6 +61,7 @@ var getIsaac = function(onSuccess, onError) {
   };
   xhr.send(null);
 };
+
 var getTestUsers = function(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/testUsers', true);
@@ -79,6 +82,7 @@ var getTestUsers = function(onSuccess, onError) {
   };
   xhr.send(null);
 };
+
 var postCounter = function(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', '/counter', true);
@@ -99,6 +103,7 @@ var postCounter = function(onSuccess, onError) {
   };
   xhr.send(null);
 };
+
 var getCounter = function(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/counter', true);

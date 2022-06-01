@@ -51,7 +51,19 @@
             });
 
             function showUsers(response){
-                document.getElementById('userlist').innerHTML = "Users are: " + response.value
+
+                document.getElementById('userlist').innerHTML = "Users are: <br>";
+
+                console.log(response);
+
+                var i;
+
+                for(i = 0; i < response.length; i++){
+                    var obj = response[i];
+                    document.getElementById('userlist').innerHTML += obj.userName + "<br>"
+                }
+
+
             }
 
         </script>
@@ -71,7 +83,7 @@
         });
 
         function updateCounter(response){
-            document.getElementById('counter').innerHTML = "Counter: " + response.value
+            document.getElementById('counter').innerHTML = "Counter: " + response.count
         }
 
         document.getElementById('increase').addEventListener('click', function(){
