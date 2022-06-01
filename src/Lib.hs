@@ -4,10 +4,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Lib
-    ( startApp
-    , app
-    ) where
+module Lib where
 
 import Data.Aeson
 import Data.Aeson.TH
