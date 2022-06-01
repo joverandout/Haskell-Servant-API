@@ -106,6 +106,11 @@ test = do
   execute conn "DELETE FROM test WHERE id = ?" (Only rowId)
   close conn
 
+test2 = do
+    conn <- open "test.db"
+    execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
+    close conn
+
 app :: Maybe (TVar Counter) -> Application
 app counter = serve userAPI' $ server' counter
 
