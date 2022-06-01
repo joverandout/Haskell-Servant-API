@@ -24,6 +24,8 @@ import Control.Monad.IO.Class
 import System.FilePath
 import Data.Maybe
 
+import Database.SQLite.Simple
+
 
 data User = User
   { userName :: String
