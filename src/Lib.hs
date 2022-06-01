@@ -3,11 +3,14 @@
 {-# LANGUAGE TypeOperators   #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Lib where
 
 import Data.Aeson
 import Data.Aeson.TH
+import Data.Maybe
+import qualified Data.Text as T
 
 import Network.Wai
 import Network.Wai.Handler.Warp
@@ -17,14 +20,13 @@ import Servant.JS
 
 import Text.Printf
 
+import Database.SQLite.Simple
+
 import GHC.Generics (Generic)
 import GHC.Conc
 import Control.Monad.IO.Class
 
 import System.FilePath
-import Data.Maybe
-
-import Database.SQLite.Simple
 
 
 data User = User
@@ -83,6 +85,26 @@ startApp = do
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
+
+data TestField = TestField Int T.Text deriving (Show)
+
+instance FromRow TestField where
+  fromRow = TestField <$> field <*> field
+
+instance ToRow TestField where
+  toRow (TestField id_ str) = toRow (id_, str)
+
+test = do
+  conn <- open "test.db"
+  execute_ conn "CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY, str TEXT)"
+  execute conn "INSERT INTO test (str) VALUES (?)" (Only ("test string 2" :: String))
+  execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
+  rowId <- lastInsertRowId conn
+  executeNamed conn "UPDATE test SET str = :str WHERE id = :id" [":str" := ("updated str" :: T.Text), ":id" := rowId]
+  r <- query_ conn "SELECT * from test" :: IO [TestField]
+  mapM_ print r
+  execute conn "DELETE FROM test WHERE id = ?" (Only rowId)
+  close conn
 
 app :: Maybe (TVar Counter) -> Application
 app counter = serve userAPI' $ server' counter
