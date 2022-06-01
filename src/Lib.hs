@@ -11,18 +11,20 @@ module Lib
 
 import Data.Aeson
 import Data.Aeson.TH
+
 import Network.Wai
 import Network.Wai.Handler.Warp
-import Servant
 
-import System.FilePath
+import Servant
 import Servant.JS
 
 import Text.Printf
+
 import GHC.Generics (Generic)
 import GHC.Conc
 import Control.Monad.IO.Class
 
+import System.FilePath
 
 
 data User = User
@@ -34,6 +36,9 @@ data User = User
 
 $(deriveJSON defaultOptions ''User)
 
+-- setup all the default paths of the api and the type that they
+-- are expected to return. The type of request they are is 
+-- specified by either Get or Post.
 type UserAPI = "users" :> Get '[JSON] [User]
            :<|> "albert" :> Get '[JSON] User
            :<|> "isaac" :> Get '[JSON] User
@@ -63,6 +68,9 @@ increaseCounter counter = liftIO . atomically $ do
 currentCounter :: MonadIO m => TVar Counter -> m Counter
 currentCounter counter = liftIO $ readTVarIO counter
 
+-- Starts the web server on a random port and opens it in
+-- the console, click the link to follow it or manually enter it
+-- to your browser
 startApp :: IO ()
 startApp = do
   putStrLn "Starting web server..."
@@ -99,10 +107,11 @@ users = [isaac, albert, joe]
 testUsers :: [User]
 testUsers = [isaac, albert, joe]
 
-
 www :: FilePath
 www = "static"
 
+-- returns the paths of the api, with the json objects that they
+-- return
 server :: TVar Counter -> Server UserAPI
 server counter = return users
      :<|> return albert
