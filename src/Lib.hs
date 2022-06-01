@@ -46,6 +46,7 @@ type UserAPI = "users" :> Get '[JSON] [User]
            :<|> "counter" :> Post '[JSON] Counter
            :<|> "counter" :> Get '[JSON] Counter
 
+-- old api used for initial testing
 type UserAPI' = UserAPI
             :<|> Raw
 
@@ -55,6 +56,7 @@ newtype Counter = Counter {
 
 instance ToJSON Counter
 
+-- initiate counter to zero on startup of web server
 newCounter :: IO (TVar Counter)
 newCounter = newTVarIO 0
 
@@ -85,6 +87,7 @@ startApp = do
 app :: TVar Counter -> Application
 app counter = serve userAPI' $ server' counter
 
+-- func to return the proxy element of the api data type
 userAPI :: Proxy UserAPI
 userAPI = Proxy
 
@@ -100,6 +103,7 @@ isaac = User "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
 albert :: User
 albert = User "Albert Einstein" "ae@mc2.org" 136 "moustache man"
 
+-- test object with a set of 3 users
 users :: [User]
 users = [isaac, albert, joe]
 
@@ -107,11 +111,11 @@ users = [isaac, albert, joe]
 testUsers :: [User]
 testUsers = [isaac, albert, joe]
 
+-- static web filepath
 www :: FilePath
 www = "static"
 
 -- returns the paths of the api, with the json objects that they
--- return
 server :: TVar Counter -> Server UserAPI
 server counter = return users
      :<|> return albert
