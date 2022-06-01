@@ -3,7 +3,14 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: servant-js-0.9.4.2@sha256:b2d973b43bfa69f35900bf46e989348b7300c398b599ddf74b90a06173c023f2,3522
+    pantry-tree:
+      size: 961
+      sha256: ba201c0f2aa274afa40dfd3c31abe6e5b0791f14320f7167e750c57508dc70f6
+  original:
+    hackage: servant-js-0.9.4.2@sha256:b2d973b43bfa69f35900bf46e989348b7300c398b599ddf74b90a06173c023f2,3522
 snapshots:
 - completed:
     size: 590822

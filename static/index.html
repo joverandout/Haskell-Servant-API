@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servant Shenanigans</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+    <script src="api.js" type="text/javascript"></script>
+
+    <style>
+        body{
+            text-align: center;
+        }
+        #users {
+            margin-top: 10px;
+
+        }
+        #userlist {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        #increase{
+            margin-left: 10px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <h1> Servant Shenanigans </h1>
+
+    <h3 style="margin: 10px">Note</h3>
+    <p>
+        Check Comment.
+    </p>
+
+
+    <div>
+        <button type="button" class="btn btn-outline-danger btn-lg" id="users" >Get Users</button>
+        <div id="userlist">
+
+        </div>
+        <script type="text/javascript">
+            document.getElementById('users').addEventListener('click', function(){
+                getUsers(showUsers, alert);
+            });
+
+            function showUsers(response){
+                document.getElementById('userlist').innerHTML = "Users are: " + response.value
+            }
+
+        </script>
+
+    </div>
+
+    <span id="counter">Counter:  </span>
+    <button type="button" class="btn btn-primary btn-sm" id="increase">Increase me!</button>
+
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            getCounter(updateCounter, alert);
+
+            window.setInterval(function() {
+                getCounter(updateCounter, alert);
+            }, 1000);
+        });
+
+        function updateCounter(response){
+            document.getElementById('counter').innerHTML = "Counter: " + response.value
+        }
+
+        document.getElementById('increase').addEventListener('click', function(){
+            postCounter(updateCounter, alert);
+        });
+
+    </script>
+    
+
+</body>
+</html>

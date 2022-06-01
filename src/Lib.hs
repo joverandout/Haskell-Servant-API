@@ -1,6 +1,9 @@
 {-# LANGUAGE DataKinds       #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeOperators   #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveGeneric #-}
+
 module Lib
     ( startApp
     , app
@@ -13,8 +16,13 @@ import Network.Wai.Handler.Warp
 import Servant
 
 import System.FilePath
+import Servant.JS
 
 import Text.Printf
+import GHC.Generics (Generic)
+import GHC.Conc
+import Control.Monad.IO.Class
+
 
 
 data User = User
@@ -30,22 +38,50 @@ type UserAPI = "users" :> Get '[JSON] [User]
            :<|> "albert" :> Get '[JSON] User
            :<|> "isaac" :> Get '[JSON] User
            :<|> "testUsers" :> Get '[JSON] [User]
+           :<|> "counter" :> Post '[JSON] Counter
+           :<|> "counter" :> Get '[JSON] Counter
+
+type UserAPI' = UserAPI
+            :<|> Raw
+
+newtype Counter = Counter {
+  count :: Int
+} deriving (Num, Show, Generic)
+
+instance ToJSON Counter
+
+newCounter :: IO (TVar Counter)
+newCounter = newTVarIO 0
+
+increaseCounter :: MonadIO m => TVar Counter -> m Counter
+increaseCounter counter = liftIO . atomically $ do
+  oldValue <- readTVar counter
+  let newValue = oldValue + 1
+  writeTVar counter newValue
+  return newValue
+
+currentCounter :: MonadIO m => TVar Counter -> m Counter
+currentCounter counter = liftIO $ readTVarIO counter
 
 startApp :: IO ()
 startApp = do
   putStrLn "Starting web server..."
-  withApplication (pure app) $ \port -> do
+  writeJSForAPI userAPI vanillaJS (www </> "api.js")
+  counter <- newCounter
+  withApplication (pure $ app counter) $ \port -> do
         putStrLn $ printf "Started on http://localhost:%d (CMD Click)" port
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
 
-app :: Application
-app = serve userAPI server
+app :: TVar Counter -> Application
+app counter = serve userAPI' $ server' counter
 
 userAPI :: Proxy UserAPI
 userAPI = Proxy
 
+userAPI' :: Proxy UserAPI'
+userAPI' = Proxy
 
 joe :: User
 joe = User "Joe Moore" "Joe@gmail.com" 21 "club legend"
@@ -63,8 +99,20 @@ users = [isaac, albert, joe]
 testUsers :: [User]
 testUsers = [isaac, albert, joe]
 
-server :: Server UserAPI
-server = return users
+
+www :: FilePath
+www = "static"
+
+server :: TVar Counter -> Server UserAPI
+server counter = return users
      :<|> return albert
      :<|> return isaac
      :<|> return testUsers
+     :<|> increaseCounter counter
+     :<|> currentCounter counter
+
+server' :: TVar Counter -> Server UserAPI'
+server' counter = server counter
+    :<|> serveDirectoryFileServer www
+
+
