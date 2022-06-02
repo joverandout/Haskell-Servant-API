@@ -88,17 +88,14 @@ startApp = do
 
 data TestField = TestField Int T.Text deriving (Show)
 
-data TestField2 = TestField2 T.Text T.Text Int T.Text deriving (Show)
-
-
 instance FromRow TestField where
   fromRow = TestField <$> field <*> field
 
 instance ToRow TestField where
   toRow (TestField id_ str) = toRow (id_, str)
 
-instance FromRow TestField2 where
-  fromRow = TestField2 <$> field <*> field <*> field <*> field
+instance FromRow User where
+  fromRow = User <$> field <*> field <*> field <*> field
 
 
 test = do
@@ -114,9 +111,9 @@ test = do
   close conn
 
 test2 = do
-    conn <- open "test.db"
-    execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
-    close conn
+  conn <- open "test.db"
+  execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
+  close conn
 
 testUsersDatabase userr = do
   conn <- open "test.db"
@@ -125,7 +122,7 @@ testUsersDatabase userr = do
 
 testGetFromDB = do
   conn <- open "test.db"
-  r <- query_ conn "SELECT * from users" :: IO [TestField2]
+  r <- query_ conn "SELECT * from users" :: IO [User]
   mapM_ print r
   close conn
   
