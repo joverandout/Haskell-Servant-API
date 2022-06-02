@@ -88,11 +88,18 @@ startApp = do
 
 data TestField = TestField Int T.Text deriving (Show)
 
+data TestField2 = TestField2 T.Text T.Text Int T.Text deriving (Show)
+
+
 instance FromRow TestField where
   fromRow = TestField <$> field <*> field
 
 instance ToRow TestField where
   toRow (TestField id_ str) = toRow (id_, str)
+
+instance FromRow TestField2 where
+  fromRow = TestField2 <$> field <*> field <*> field <*> field
+
 
 test = do
   conn <- open "test.db"
@@ -110,6 +117,18 @@ test2 = do
     conn <- open "test.db"
     execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
     close conn
+
+testUsersDatabase userr = do
+  conn <- open "test.db"
+  execute conn "INSERT INTO users VALUES (?,?,?,?)" (userName userr, userEmail userr, userAge userr, userOccupation userr)
+  close conn
+
+testGetFromDB = do
+  conn <- open "test.db"
+  r <- query_ conn "SELECT * from users" :: IO [TestField2]
+  mapM_ print r
+  close conn
+  
 
 app :: Maybe (TVar Counter) -> Application
 app counter = serve userAPI' $ server' counter
@@ -138,11 +157,7 @@ users = [isaac, albert, joe]
 testUsers :: [User]
 testUsers = [isaac, albert, joe]
 
-testUsersDatabase = do
-  let isaacc = User "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
-  conn <- open "test.db"
-  execute conn "INSERT INTO users VALUES (?,?,?,?)" ((userName isaacc), (userEmail isaacc), (userAge isaacc), userOccupation isaacc)
-  close conn
+
 
 -- static web filepath
 www :: FilePath
