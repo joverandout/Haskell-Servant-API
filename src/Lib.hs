@@ -86,6 +86,8 @@ startApp = do
         ch <- getChar
         print ch
 
+
+--DATABASE STUFF STARTS HERE
 data TestField = TestField Int T.Text deriving (Show)
 
 instance FromRow TestField where
@@ -125,7 +127,8 @@ testGetFromDB = do
   r <- query_ conn "SELECT * from users" :: IO [User]
   print r
   close conn
-  
+--DATABASE STUFF ENDS HERE
+
 
 app :: Maybe (TVar Counter) -> Application
 app counter = serve userAPI' $ server' counter
