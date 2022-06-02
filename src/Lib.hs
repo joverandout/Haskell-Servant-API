@@ -138,6 +138,12 @@ users = [isaac, albert, joe]
 testUsers :: [User]
 testUsers = [isaac, albert, joe]
 
+testUsersDatabase = do
+  let isaacc = User "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
+  conn <- open "test.db"
+  execute conn "INSERT INTO users VALUES (?,?,?,?)" ((userName isaacc), (userEmail isaacc), (userAge isaacc), userOccupation isaacc)
+  close conn
+
 -- static web filepath
 www :: FilePath
 www = "static"
