@@ -1,10 +1,8 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
---
--- hash: a3ed312622c9a2b14bafee3d39dea717a4293feb59bf9d80f6eb611d4ee4eff8
 
 name:           myproj
 version:        0.1.0.0
@@ -26,26 +24,27 @@ source-repository head
 
 library
   exposed-modules:
+      Database
+      DataTypes
       Lib
+      OpenID
   other-modules:
       Paths_myproj
-      , Database
-      , DataTypes
   hs-source-dirs:
       src
   build-depends:
       aeson
     , base >=4.7 && <5
-    , servant-server
+    , bytestring
+    , filepath
+    , protolude
     , servant-js
+    , servant-server
+    , sqlite-simple
+    , text
+    , time
     , wai
     , warp
-    , time
-    , text
-    , filepath
-    , sqlite-simple
-    , protolude
-    , bytestring >=0.11.3.0
   default-language: Haskell2010
 
 executable myproj-exe
@@ -58,8 +57,15 @@ executable myproj-exe
   build-depends:
       aeson
     , base
+    , bytestring
+    , filepath
     , myproj
+    , protolude
+    , servant-js
     , servant-server
+    , sqlite-simple
+    , text
+    , time
     , wai
     , warp
   default-language: Haskell2010
@@ -75,11 +81,18 @@ test-suite myproj-test
   build-depends:
       aeson
     , base
+    , bytestring
+    , filepath
     , hspec
     , hspec-wai
     , hspec-wai-json
     , myproj
+    , protolude
+    , servant-js
     , servant-server
+    , sqlite-simple
+    , text
+    , time
     , wai
     , warp
   default-language: Haskell2010

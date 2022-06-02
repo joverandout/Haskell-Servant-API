@@ -24,6 +24,15 @@ dependencies:
 - servant-server
 - wai
 - warp
+- protolude
+- servant-js
+- time
+- text
+- filepath
+- sqlite-simple
+- bytestring
+
+
 
 library:
   source-dirs: src
