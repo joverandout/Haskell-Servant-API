@@ -10,10 +10,11 @@ module Lib where
 import Data.Aeson
 import Data.Aeson.TH
 import Data.Maybe
-import qualified Data.Text as T
+import DataTypes
+import Database
 
 import Network.Wai
-import Network.Wai.Handler.Warp
+import Network.Wai.Handler.Warp ( withApplication )
 
 import Servant
 import Servant.JS
@@ -29,15 +30,6 @@ import Control.Monad.IO.Class
 import System.FilePath
 
 
-data User = User
-  { userName :: String
-  , userEmail :: String
-  , userAge :: Int
-  , userOccupation :: String
-  } deriving (Eq, Show)
-
-$(deriveJSON defaultOptions ''User)
-
 -- setup all the default paths of the api and the type that they
 -- are expected to return. The type of request they are is 
 -- specified by either Get or Post.
@@ -52,11 +44,6 @@ type UserAPI = "users" :> Get '[JSON] [User]
 type UserAPI' = UserAPI
             :<|> Raw
 
-newtype Counter = Counter {
-  count :: Int
-} deriving (Num, Show, Generic)
-
-instance ToJSON Counter
 
 -- initiate counter to zero on startup of web server
 newCounter :: IO (TVar Counter)
@@ -85,49 +72,6 @@ startApp = do
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
-
-
---DATABASE STUFF STARTS HERE
-data TestField = TestField Int T.Text deriving (Show)
-
-instance FromRow TestField where
-  fromRow = TestField <$> field <*> field
-
-instance ToRow TestField where
-  toRow (TestField id_ str) = toRow (id_, str)
-
-instance FromRow User where
-  fromRow = User <$> field <*> field <*> field <*> field
-
-
-test = do
-  conn <- open "test.db"
-  execute_ conn "CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY, str TEXT)"
-  execute conn "INSERT INTO test (str) VALUES (?)" (Only ("test string 2" :: String))
-  execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
-  rowId <- lastInsertRowId conn
-  executeNamed conn "UPDATE test SET str = :str WHERE id = :id" [":str" := ("updated str" :: T.Text), ":id" := rowId]
-  r <- query_ conn "SELECT * from test" :: IO [TestField]
-  mapM_ print r
-  execute conn "DELETE FROM test WHERE id = ?" (Only rowId)
-  close conn
-
-test2 = do
-  conn <- open "test.db"
-  execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
-  close conn
-
-testUsersDatabase userr = do
-  conn <- open "test.db"
-  execute conn "INSERT INTO users VALUES (?,?,?,?)" (userName userr, userEmail userr, userAge userr, userOccupation userr)
-  close conn
-
-testGetFromDB = do
-  conn <- open "test.db"
-  r <- query_ conn "SELECT * from users" :: IO [User]
-  print r
-  close conn
---DATABASE STUFF ENDS HERE
 
 
 app :: Maybe (TVar Counter) -> Application
