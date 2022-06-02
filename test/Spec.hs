@@ -12,6 +12,8 @@ import GHC.Generics (Generic)
 import GHC.Conc
 import Control.Monad.IO.Class
 
+import DataTypes
+
 main :: IO ()
 main = do
     counter <- newCounter
