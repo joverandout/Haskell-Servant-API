@@ -123,7 +123,7 @@ testUsersDatabase userr = do
 testGetFromDB = do
   conn <- open "test.db"
   r <- query_ conn "SELECT * from users" :: IO [User]
-  mapM_ print r
+  print r
   close conn
   
 
