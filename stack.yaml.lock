@@ -32,6 +32,13 @@ packages:
       sha256: 0840abb02bf1882bdf356dc7360453d0b121739a808c981d8bcf4fa0c3ee043f
   original:
     hackage: semigroups-0.19.2@sha256:4eaa22de527068e5a323c4ba5411e24b60386507730d0445865ab71b35e5f95e,6539
+- completed:
+    hackage: protolude-0.3.1@sha256:1cc9e5a5c26c33a43c52b554443dd9779fef13974eaa0beec7ca6d2551b400da,2647
+    pantry-tree:
+      size: 1645
+      sha256: 6452a6ca8d395f7d810139779bb0fd16fc1dbb00f1862630bc08ef5a100430f9
+  original:
+    hackage: protolude-0.3.1
 snapshots:
 - completed:
     size: 590822
