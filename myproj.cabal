@@ -29,6 +29,8 @@ library
       Lib
   other-modules:
       Paths_myproj
+      , Database
+      , DataTypes
   hs-source-dirs:
       src
   build-depends:

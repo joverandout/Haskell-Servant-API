@@ -1,5 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
-
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module DataTypes where
 import Data.Aeson.TH
