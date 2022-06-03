@@ -25,13 +25,13 @@ main = do
 
 spec :: Maybe (TVar Counter) -> Spec
 spec counter = do
-    with (return $ app counter) $ do
+    with (return $ app Nothing) $ do
         describe "GET /testUsers" $ do
             it "responds with 200" $ do
                 get "/testUsers" `shouldRespondWith` 200
             it "responds with [User]" $ do
                 let users = "[{\"userName\":\"Isaac Newton\",\"userEmail\":\"isaac@newton.co.uk\",\"userAge\":372,\"userOccupation\":\"apple guy\"},{\"userName\":\"Albert Einstein\",\"userEmail\":\"ae@mc2.org\",\"userAge\":136,\"userOccupation\":\"moustache man\"},{\"userName\":\"Joe Moore\",\"userEmail\":\"Joe@gmail.com\",\"userAge\":21,\"userOccupation\":\"club legend\"}]"
                 get "/testUsers" `shouldRespondWith` users
-    describe "Increase Counter" $ do
-        it "Counter Increases" $ do
-            increaseCounter (fromJust counter) `shouldBe` (Counter 1)
+    -- describe "Increase Counter" $ do
+    --     it "Counter Increases" $ do
+    --         increaseCounter (fromJust counter) `shouldBe` (Counter 1)
