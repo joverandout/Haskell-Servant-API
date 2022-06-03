@@ -35,12 +35,15 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , blaze-html
+    , blaze-markup
     , bytestring
     , filepath
     , http-client
     , http-client-tls
     , jose-jwt
     , protolude
+    , random
     , servant-blaze
     , servant-js
     , servant-server
@@ -61,6 +64,8 @@ executable myproj-exe
   build-depends:
       aeson
     , base
+    , blaze-html
+    , blaze-markup
     , bytestring
     , filepath
     , http-client
@@ -68,6 +73,7 @@ executable myproj-exe
     , jose-jwt
     , myproj
     , protolude
+    , random
     , servant-blaze
     , servant-js
     , servant-server
@@ -89,6 +95,8 @@ test-suite myproj-test
   build-depends:
       aeson
     , base
+    , blaze-html
+    , blaze-markup
     , bytestring
     , filepath
     , hspec
@@ -99,6 +107,7 @@ test-suite myproj-test
     , jose-jwt
     , myproj
     , protolude
+    , random
     , servant-blaze
     , servant-js
     , servant-server

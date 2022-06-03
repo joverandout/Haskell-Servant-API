@@ -35,6 +35,9 @@ dependencies:
 - http-client
 - http-client-tls
 - servant-blaze
+- random
+- blaze-html
+- blaze-markup
 
 
 library:

@@ -34,3 +34,11 @@ import Network.HTTP.Client.TLS (tlsManagerSettings)
 import Network.Wai.Handler.Warp (run)
 import Servant
 import Servant.HTML.Blaze (HTML)
+import qualified System.Random as Random
+import Text.Blaze (ToMarkup (..))
+import qualified Text.Blaze.Html as H
+import Text.Blaze.Html5 ((!))
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as HA
+import Text.Blaze.Renderer.Utf8 (renderMarkup)
+-- import qualified Web.OIDC.Client as O

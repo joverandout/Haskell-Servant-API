@@ -39,6 +39,13 @@ packages:
       sha256: 6452a6ca8d395f7d810139779bb0fd16fc1dbb00f1862630bc08ef5a100430f9
   original:
     hackage: protolude-0.3.1
+- completed:
+    hackage: oidc-client-0.6.0.0@sha256:2079dc5c9dfb5b3e2fa93098254ca16787c01a0cd3634b1d84afe84c9a6c4825,3368
+    pantry-tree:
+      size: 1298
+      sha256: c8dac64944a1e60d14958067e1992732effe723d60353690720c34b4d126af48
+  original:
+    hackage: oidc-client-0.6.0.0
 snapshots:
 - completed:
     size: 590822
