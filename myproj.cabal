@@ -37,7 +37,11 @@ library
     , base >=4.7 && <5
     , bytestring
     , filepath
+    , http-client
+    , http-client-tls
+    , jose-jwt
     , protolude
+    , servant-blaze
     , servant-js
     , servant-server
     , sqlite-simple
@@ -59,8 +63,12 @@ executable myproj-exe
     , base
     , bytestring
     , filepath
+    , http-client
+    , http-client-tls
+    , jose-jwt
     , myproj
     , protolude
+    , servant-blaze
     , servant-js
     , servant-server
     , sqlite-simple
@@ -86,8 +94,12 @@ test-suite myproj-test
     , hspec
     , hspec-wai
     , hspec-wai-json
+    , http-client
+    , http-client-tls
+    , jose-jwt
     , myproj
     , protolude
+    , servant-blaze
     , servant-js
     , servant-server
     , sqlite-simple

@@ -31,7 +31,10 @@ dependencies:
 - filepath
 - sqlite-simple
 - bytestring
-
+- jose-jwt
+- http-client
+- http-client-tls
+- servant-blaze
 
 
 library:
