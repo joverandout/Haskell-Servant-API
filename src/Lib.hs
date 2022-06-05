@@ -100,6 +100,8 @@ testUsers :: [User]
 testUsers = [isaac, albert, joe]
 
 
+-- createNewUser :: String -> String -> Int -> String -> User
+-- createNewUser name email age occupation = 
 
 -- static web filepath
 www :: FilePath
