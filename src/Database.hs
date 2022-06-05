@@ -37,8 +37,8 @@ test2 = do
   execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
   close conn
 
-testUsersDatabase :: User -> IO()
-testUsersDatabase userr@User{userName = n, userEmail = e, userAge = a, userOccupation = o} = do
+addUserToDB :: User -> IO()
+addUserToDB userr@User{userName = n, userEmail = e, userAge = a, userOccupation = o} = do
   conn <- open "test.db"
   execute conn "INSERT INTO users VALUES (?,?,?,?)" (n, e, a, o)
   close conn
