@@ -43,11 +43,10 @@ testUsersDatabase userr@User{userName = n, userEmail = e, userAge = a, userOccup
   execute conn "INSERT INTO users VALUES (?,?,?,?)" (n, e, a, o)
   close conn
 
--- testUsersDatabase :: IO [User]
+testGetFromDB :: IO [User]
 testGetFromDB = do
   conn <- open "test.db"
   r <- query_ conn "SELECT * from users" :: IO [User]
-  -- print r
   close conn
   return r
 --DATABASE STUFF ENDS HERE
