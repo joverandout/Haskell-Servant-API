@@ -100,8 +100,11 @@ testUsers :: [User]
 testUsers = [isaac, albert, joe]
 
 
-createNewUser :: String -> String -> Int -> String -> IO()
-createNewUser name email age occupation = addUserToDB (User name email age occupation)
+createNewUser :: String -> String -> Int -> String -> IO User
+createNewUser name email age occupation = do
+  let user = User name email age occupation
+  addUserToDB user
+  pure user
 
 -- static web filepath
 www :: FilePath

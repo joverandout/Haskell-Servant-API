@@ -43,6 +43,7 @@ extra-deps:
 - protolude-0.3.1
 - oidc-client-0.6.0.0
 
+
 # - acme-missiles-0.3
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a

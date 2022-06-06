@@ -38,7 +38,7 @@ dependencies:
 - random
 - blaze-html
 - blaze-markup
-
+# - oidc-client
 
 library:
   source-dirs: src
