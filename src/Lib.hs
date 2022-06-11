@@ -27,7 +27,6 @@ import Control.Monad.IO.Class
 
 import System.FilePath
 
-
 -- setup all the default paths of the api and the type that they
 -- are expected to return. The type of request they are is 
 -- specified by either Get or Post.
@@ -41,7 +40,6 @@ type UserAPI = "users" :> Get '[JSON] [User]
 -- old api used for initial testing
 type UserAPI' = UserAPI
             :<|> Raw
-
 
 -- initiate counter to zero on startup of web server
 newCounter :: IO (TVar Counter)
@@ -98,7 +96,6 @@ users = [isaac, albert, joe]
 -- used for unit tests
 testUsers :: [User]
 testUsers = [isaac, albert, joe]
-
 
 createNewUser :: String -> String -> Int -> String -> IO User
 createNewUser name email age occupation = do
