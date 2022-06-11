@@ -63,7 +63,7 @@ currentCounter counter = liftIO $ readTVarIO counter
 startApp :: IO ()
 startApp = do
   putStrLn "Starting web server..."
-  writeJSForAPI userAPI vanillaJS (www </> "api.js")
+  writeJSForAPI userAPI vanillaJS (worldwideweb </> "api.js")
   counter <- newCounter
   withApplication (pure $ app (Just counter)) $ \port -> do
         putStrLn $ printf "Started on http://localhost:%d (CMD Click)" port
@@ -107,8 +107,8 @@ createNewUser name email age occupation = do
   pure user
 
 -- static web filepath
-www :: FilePath
-www = "static"
+worldwideweb :: FilePath
+worldwideweb = "static"
 
 -- returns the paths of the api, with the json objects that they
 server :: Maybe (TVar Counter) -> Server UserAPI
@@ -121,6 +121,6 @@ server counter = return users
 
 server' :: Maybe (TVar Counter) -> Server UserAPI'
 server' counter = server counter
-    :<|> serveDirectoryFileServer www
+    :<|> serveDirectoryFileServer worldwideweb
 
 
