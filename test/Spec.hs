@@ -17,6 +17,7 @@ import DataTypes
 main :: IO ()
 main = do
     counter <- newCounter
+    testCounter <- newCounter' 1
     hspec (spec $ Just counter)
 
 -- testCounter :: Counter -> TVar Counter
@@ -39,9 +40,8 @@ spec counter = do
                 get "/counter" `shouldRespondWith` 200
             it "'get /counter' responds with a counter value" $ do
                 get "/counter" `shouldRespondWith` "{\"count\":0}"
-    let testCounter = Counter 1
-    describe "'increaseCounter' counter test" $ do
+    describe "'increaseCounter' test" $ do
         it "increments the counter by 1" $ do
-            2 + 1 `shouldBe` 3
-            -- type error on following line, can't need Counter to be m0 Counter and can't figure out how to achieve this
-            -- increaseCounter (fromJust counter) `shouldBe` testCounter
+            --2 + 1 `shouldBe` 3
+            -- type error on following line, can't need Counter to be m0 Counter and can't figure out why
+            increaseCounter (fromJust counter) `shouldBe` testCounter

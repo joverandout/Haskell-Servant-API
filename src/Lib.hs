@@ -45,6 +45,9 @@ type UserAPI' = UserAPI
 newCounter :: IO (TVar Counter)
 newCounter = newTVarIO 0
 
+newCounter' :: Int -> IO (TVar Counter)
+newCounter' x = newTVarIO (Counter x)
+
 increaseCounter :: MonadIO m => TVar Counter -> m Counter
 increaseCounter counter = liftIO . atomically $ do
   oldValue <- readTVar counter
