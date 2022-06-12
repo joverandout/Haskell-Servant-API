@@ -43,4 +43,5 @@ spec counter = do
     describe "'increaseCounter' counter test" $ do
         it "increments the counter by 1" $ do
             2 + 1 `shouldBe` 3
+            -- type error on following line, can't need Counter to be m0 Counter and can't figure out how to achieve this
             -- increaseCounter (fromJust counter) `shouldBe` testCounter
