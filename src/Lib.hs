@@ -69,7 +69,6 @@ startApp = do
         ch <- getChar
         print ch
 
-
 app :: Maybe (TVar Counter) -> Application
 app counter = serve userAPI' $ server' counter
 
@@ -119,5 +118,3 @@ server counter = return users
 server' :: Maybe (TVar Counter) -> Server UserAPI'
 server' counter = server counter
     :<|> serveDirectoryFileServer worldwideweb
-
-

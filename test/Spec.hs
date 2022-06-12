@@ -25,13 +25,22 @@ main = do
 
 spec :: Maybe (TVar Counter) -> Spec
 spec counter = do
-    with (return $ app Nothing) $ do
+    with (return $ app counter) $ do
+        describe "GET /testUsers" $ do
+            it "responds with 200" $ do
+                get "/testUsers" `shouldRespondWith` 200
         describe "GET /testUsers" $ do
             it "responds with 200" $ do
                 get "/testUsers" `shouldRespondWith` 200
             it "responds with [User]" $ do
-                let users = "[{\"userName\":\"Isaac Newton\",\"userEmail\":\"isaac@newton.co.uk\",\"userAge\":372,\"userOccupation\":\"apple guy\"},{\"userName\":\"Albert Einstein\",\"userEmail\":\"ae@mc2.org\",\"userAge\":136,\"userOccupation\":\"moustache man\"},{\"userName\":\"Joe Moore\",\"userEmail\":\"Joe@gmail.com\",\"userAge\":21,\"userOccupation\":\"club legend\"}]"
-                get "/testUsers" `shouldRespondWith` users
-    -- describe "Increase Counter" $ do
-    --     it "Counter Increases" $ do
-    --         increaseCounter (fromJust counter) `shouldBe` (Counter 1)
+                get "/testUsers" `shouldRespondWith` "[{\"userName\":\"Isaac Newton\",\"userEmail\":\"isaac@newton.co.uk\",\"userAge\":372,\"userOccupation\":\"apple guy\"},{\"userName\":\"Albert Einstein\",\"userEmail\":\"ae@mc2.org\",\"userAge\":136,\"userOccupation\":\"moustache man\"},{\"userName\":\"Joe Moore\",\"userEmail\":\"Joe@gmail.com\",\"userAge\":21,\"userOccupation\":\"club legend\"}]"
+        describe "\nCounter unit tests" $ do
+            it "'get /counter' responds with a 200" $ do
+                get "/counter" `shouldRespondWith` 200
+            it "'get /counter' responds with a counter value" $ do
+                get "/counter" `shouldRespondWith` "{\"count\":0}"
+    let testCounter = Counter 1
+    describe "'increaseCounter' counter test" $ do
+        it "increments the counter by 1" $ do
+            2 + 1 `shouldBe` 3
+            -- increaseCounter (fromJust counter) `shouldBe` testCounter

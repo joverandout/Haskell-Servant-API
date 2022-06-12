@@ -19,7 +19,7 @@ instance ToRow TestField where
 instance FromRow User where
   fromRow = User <$> field <*> field <*> field <*> field
 
-
+test :: IO ()
 test = do
   conn <- open "test.db"
   execute_ conn "CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY, str TEXT)"
@@ -32,6 +32,7 @@ test = do
   execute conn "DELETE FROM test WHERE id = ?" (Only rowId)
   close conn
 
+test2 :: IO ()
 test2 = do
   conn <- open "test.db"
   execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
