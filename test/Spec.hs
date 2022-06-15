@@ -40,8 +40,10 @@ spec counter = do
                 get "/counter" `shouldRespondWith` 200
             it "'get /counter' responds with a counter value" $ do
                 get "/counter" `shouldRespondWith` "{\"count\":0}"
-    describe "'increaseCounter' test" $ do
-        it "increments the counter by 1" $ do
-            2 + 1 `shouldBe` 3
-            -- type error on following line, can't need Counter to be m0 Counter and can't figure out why
-            -- increaseCounter (fromJust counter) `shouldBe` testCounter
+            it "'increaseCounter' increases the counter by 1" $ do
+                increaseCounter (fromJust counter)
+                get "/counter" `shouldRespondWith` "{\"count\":1}"
+            it "'increaseCounter' can be applied multiple times" $ do
+                increaseCounter (fromJust counter)
+                increaseCounter (fromJust counter)
+                get "/counter" `shouldRespondWith` "{\"count\":3}"
