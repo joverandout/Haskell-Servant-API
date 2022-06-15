@@ -17,12 +17,7 @@ import DataTypes
 main :: IO ()
 main = do
     counter <- newCounter
-    testCounter <- newCounter' 1
     hspec (spec $ Just counter)
-
--- testCounter :: Counter -> TVar Counter
--- testCounter counterOne = TVar counterOne
--- I WANT TO MAKE A NEW TVAR COUNTER BUT CANNOT!
 
 spec :: Maybe (TVar Counter) -> Spec
 spec counter = do
