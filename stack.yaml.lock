@@ -40,12 +40,12 @@ packages:
   original:
     hackage: protolude-0.3.1
 - completed:
-    hackage: oidc-client-0.6.0.0@sha256:2079dc5c9dfb5b3e2fa93098254ca16787c01a0cd3634b1d84afe84c9a6c4825,3368
+    hackage: oidc-client-0.6.1.0@sha256:5829e916a8847e4eef64dd4bfba07d10636dc1f7b554a0d63ca1a09f2dabe448,3359
     pantry-tree:
       size: 1298
-      sha256: c8dac64944a1e60d14958067e1992732effe723d60353690720c34b4d126af48
+      sha256: 193b18f756abdea389a0ec5cc6c20e621bf74ba3850fdfb895e01a6172fd7988
   original:
-    hackage: oidc-client-0.6.0.0
+    hackage: oidc-client-0.6.1.0
 snapshots:
 - completed:
     size: 590822

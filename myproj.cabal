@@ -42,6 +42,7 @@ library
     , http-client
     , http-client-tls
     , jose-jwt
+    , oidc-client
     , protolude
     , random
     , servant-blaze
@@ -72,6 +73,7 @@ executable myproj-exe
     , http-client-tls
     , jose-jwt
     , myproj
+    , oidc-client
     , protolude
     , random
     , servant-blaze
@@ -106,6 +108,7 @@ test-suite myproj-test
     , http-client-tls
     , jose-jwt
     , myproj
+    , oidc-client
     , protolude
     , random
     , servant-blaze
