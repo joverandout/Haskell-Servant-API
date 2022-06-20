@@ -8,14 +8,14 @@ import GHC.Generics
 import Data.Aeson
 
 
-data User = User
+data User' = User'
   { userName :: String
   , userEmail :: String
   , userAge :: Int
   , userOccupation :: String
   } deriving (Eq, Show)
 
-$(deriveJSON defaultOptions ''User)
+$(deriveJSON defaultOptions ''User')
 
 
 newtype Counter = Counter {

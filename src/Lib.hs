@@ -26,16 +26,18 @@ import GHC.Conc
 import Control.Monad.IO.Class
 
 import System.FilePath
+import OpenID
 
 -- setup all the default paths of the api and the type that they
 -- are expected to return. The type of request they are is 
 -- specified by either Get or Post.
-type UserAPI = "users" :> Get '[JSON] [User]
-           :<|> "albert" :> Get '[JSON] User
-           :<|> "isaac" :> Get '[JSON] User
-           :<|> "testUsers" :> Get '[JSON] [User]
+type UserAPI = "users" :> Get '[JSON] [User']
+           :<|> "albert" :> Get '[JSON] User'
+           :<|> "isaac" :> Get '[JSON] User'
+           :<|> "testUsers" :> Get '[JSON] [User']
            :<|> "counter" :> Post '[JSON] Counter
            :<|> "counter" :> Get '[JSON] Counter
+           :<|> IdentityRoutes Customer
 
 -- old api used for initial testing
 type UserAPI' = UserAPI
@@ -66,14 +68,15 @@ startApp = do
   putStrLn "Starting web server..."
   writeJSForAPI userAPI vanillaJS (worldwideweb </> "api.js")
   counter <- newCounter
-  withApplication (pure $ app (Just counter)) $ \port -> do
+  oidcEnv <- initOIDC oidcConf
+  withApplication (pure $ app oidcEnv (Just counter)) $ \port -> do
         putStrLn $ printf "Started on http://localhost:%d (CMD Click)" port
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
 
-app :: Maybe (TVar Counter) -> Application
-app counter = serve userAPI' $ server' counter
+app :: OIDCEnv -> Maybe (TVar Counter) -> Application
+app oidcEnv counter = serve userAPI' $ server' oidcEnv counter
 
 -- func to return the proxy element of the api data type
 userAPI :: Proxy UserAPI
@@ -82,26 +85,26 @@ userAPI = Proxy
 userAPI' :: Proxy UserAPI'
 userAPI' = Proxy
 
-joe :: User
-joe = User "Joe Moore" "Joe@gmail.com" 21 "club legend"
+joe :: User'
+joe = User' "Joe Moore" "Joe@gmail.com" 21 "club legend"
 
-isaac :: User
-isaac = User "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
+isaac :: User'
+isaac = User' "Isaac Newton" "isaac@newton.co.uk" 372 "apple guy"
 
-albert :: User
-albert = User "Albert Einstein" "ae@mc2.org" 136 "moustache man"
+albert :: User'
+albert = User' "Albert Einstein" "ae@mc2.org" 136 "moustache man"
 
--- test object with a set of 3 users
-users :: [User]
+-- test object with a set of 3 User's
+users :: [User']
 users = [isaac, albert, joe]
 
 -- used for unit tests
-testUsers :: [User]
+testUsers :: [User']
 testUsers = [isaac, albert, joe]
 
-createNewUser :: String -> String -> Int -> String -> IO User
+createNewUser :: String -> String -> Int -> String -> IO User'
 createNewUser name email age occupation = do
-  let user = User name email age occupation
+  let user = User' name email age occupation
   addUserToDB user
   pure user
 
@@ -118,6 +121,7 @@ server counter = return users
      :<|> increaseCounter (fromJust counter)
      :<|> currentCounter (fromJust counter)
 
-server' :: Maybe (TVar Counter) -> Server UserAPI'
-server' counter = server counter
+server' :: OIDCEnv -> Maybe (TVar Counter) -> Server UserAPI'
+server' oidcEnv counter = server counter
+    :<|> serveOIDC oidcEnv handleOIDCLogin
     :<|> serveDirectoryFileServer worldwideweb
