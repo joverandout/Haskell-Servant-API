@@ -26,7 +26,6 @@ library
   exposed-modules:
       Database
       DataTypes
-      Keys
       Lib
       OpenID
   other-modules:

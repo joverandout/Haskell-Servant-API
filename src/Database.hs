@@ -16,8 +16,8 @@ instance FromRow TestField where
 instance ToRow TestField where
   toRow (TestField id_ str) = toRow (id_, str)
 
-instance FromRow User where
-  fromRow = User <$> field <*> field <*> field <*> field
+instance FromRow User' where
+  fromRow = User' <$> field <*> field <*> field <*> field
 
 test :: IO ()
 test = do
@@ -38,16 +38,16 @@ test2 = do
   execute conn "INSERT INTO test (id, str) VALUES (?,?)" (TestField 13 "test string 3")
   close conn
 
-addUserToDB :: User -> IO()
-addUserToDB userr@User{userName = n, userEmail = e, userAge = a, userOccupation = o} = do
+addUserToDB :: User' -> IO()
+addUserToDB userr@User'{userName = n, userEmail = e, userAge = a, userOccupation = o} = do
   conn <- open "test.db"
   execute conn "INSERT INTO users VALUES (?,?,?,?)" (n, e, a, o)
   close conn
 
-testGetFromDB :: IO [User]
+testGetFromDB :: IO [User']
 testGetFromDB = do
   conn <- open "test.db"
-  r <- query_ conn "SELECT * from users" :: IO [User]
+  r <- query_ conn "SELECT * from users" :: IO [User']
   close conn
   return r
 --DATABASE STUFF ENDS HERE
