@@ -68,7 +68,7 @@ data Customer = Customer {
 
 
 redirects :: (Conv.StringConv s ByteString) => s -> Servant.Handler ()
-redirects url = throwError err302 { errHeaders = [("Location",toS url)]}
+redirects url = throwError err302 { errHeaders = [("Location", Conv.toS url)]}
 
 data OIDCEnv = OIDCEnv { 
     oidc            :: O.OIDC                             
@@ -99,15 +99,15 @@ instance FromJSON AuthInfo where
       email       ::  Text <- v .: "email"
       email_verified  :: Bool <- v .: "email_verified"
       name            :: Text <- v .: "name"
-      return $ AuthInfo (toS email) email_verified (toS name)
+      return $ AuthInfo (Conv.toS email) email_verified (Conv.toS name)
     parseJSON invalid = AeT.typeMismatch "Coord" invalid
 
     
 instance JSON.ToJSON AuthInfo where
   toJSON (AuthInfo e ev n) = 
-    JSON.object [ "email"   JSON..= (toS e :: Text)
+    JSON.object [ "email"   JSON..= (Conv.toS e :: Text)
                 , "email_verified"  JSON..= ev
-                , "name"  JSON..= (toS n :: Text)]
+                , "name"  JSON..= (Conv.toS n :: Text)]
 
 
 instance ToMarkup User where
@@ -163,9 +163,10 @@ handleLoggedIn oidcenv handleSuccessfulId err mcode =
     Just errorMsg -> forbidden errorMsg
     Nothing -> case mcode of
       Just oauthCode -> do
-        tokens <- liftIO $ O.requestTokens (oidc oidcenv) (toS oauthCode) (mgr oidcenv)
-        putText . show . O.claims . O.idToken $ tokens
-        let jwt = toS . unJwt . O.jwt . O.idToken $ tokens
+        state <- liftIO (genState oidcenv)
+        tokens <- liftIO $ (O.requestTokens (oidc oidcenv) (Nothing) (Conv.toS oauthCode) (mgr oidcenv))
+        -- putText . show . O.idToken $ tokens
+        let jwt = Conv.toS . unJwt . O.idTokenJwt $ (tokens :: O.Tokens ())
             eAuthInfo = decodeClaims jwt :: Either O.JwtError (O.JwtHeader,AuthInfo)
         case eAuthInfo of
           Left jwtErr -> forbidden $ "JWT decode/check problem: " <> show jwtErr
@@ -207,7 +208,7 @@ instance ToMarkup Homepage where
 genRandomBS :: IO ByteString
 genRandomBS = do
   g <- Random.newStdGen
-  Random.randomRs (0, n) g & take 42 & fmap toChar & readable 0 & toS & return
+  Random.randomRs (0, n) g & take 42 & fmap toChar & readable 0 & Conv.toS & return
   where
     n = length letters - 1
     toChar i = letters List.!! i
@@ -230,10 +231,10 @@ genRandomBS = do
 customerFromAuthInfo :: AuthInfo -> IO Customer
 customerFromAuthInfo authinfo = do
   apikey <- genRandomBS
-  return Customer { account = toS (email authinfo)
+  return Customer { account = Conv.toS (email authinfo)
                   , apiKey = apikey
-                  , mail = Just (toS (email authinfo))
-                  , fullName = Just (toS (name authinfo))
+                  , mail = Just (Conv.toS (email authinfo))
+                  , fullName = Just (Conv.toS (name authinfo))
                   }
 
 handleOIDCLogin :: LoginHandler
@@ -245,8 +246,8 @@ handleOIDCLogin authInfo = do
   where
     customerToUser :: Customer -> User
     customerToUser c =
-      User { userId = toS (account c)
-           , userSecret = toS (apiKey c)
+      User { userId = Conv.toS (account c)
+           , userSecret = Conv.toS (apiKey c)
            , redirectUrl = Nothing
            , localStorageKey = "api-key"
            }
@@ -269,7 +270,7 @@ format err = toMarkup err & renderMarkup
 
 appToErr :: ServerError -> Text -> ServerError
 appToErr x msg = x
-  { errBody = toS $ format (Err (toS (errReasonPhrase x)) msg)
+  { errBody = Conv.toS $ format (Err (Conv.toS (errReasonPhrase x)) msg)
   , errHeaders =  [("Content-Type","text/html")]}
 
 unauthorized :: (MonadError ServerError m) => Text -> m a

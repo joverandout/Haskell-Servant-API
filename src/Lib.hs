@@ -27,6 +27,8 @@ import Control.Monad.IO.Class
 
 import System.FilePath
 import OpenID
+import Keys
+import Servant.HTML.Blaze
 
 -- setup all the default paths of the api and the type that they
 -- are expected to return. The type of request they are is 
@@ -39,9 +41,20 @@ type UserAPI = "users" :> Get '[JSON] [User']
            :<|> "counter" :> Get '[JSON] Counter
            :<|> IdentityRoutes Customer
 
+
 -- old api used for initial testing
 type UserAPI' = UserAPI
             :<|> Raw
+
+
+
+type API = IdentityRoutes Customer
+         :<|> Get '[HTML] Homepage
+
+
+api :: Proxy API
+api = Proxy
+
 
 -- initiate counter to zero on startup of web server
 newCounter :: IO (TVar Counter)
@@ -66,18 +79,20 @@ currentCounter counter = liftIO $ readTVarIO counter
 startApp :: IO ()
 startApp = do
   putStrLn "Starting web server..."
-  writeJSForAPI userAPI vanillaJS (worldwideweb </> "api.js")
+  --writeJSForAPI userAPI vanillaJS (worldwideweb </> "api.js")
   counter <- newCounter
   oidcEnv <- initOIDC oidcConf
-  withApplication (pure $ app oidcEnv (Just counter)) $ \port -> do
+  withApplication (pure $ app'' oidcEnv) $ \port -> do
+  --withApplication (pure $ app oidcEnv (Just counter)) $ \port -> do
         putStrLn $ printf "Started on http://localhost:%d (CMD Click)" port
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
 
+{-
 app :: OIDCEnv -> Maybe (TVar Counter) -> Application
 app oidcEnv counter = serve userAPI' $ server' oidcEnv counter
-
+-}
 -- func to return the proxy element of the api data type
 userAPI :: Proxy UserAPI
 userAPI = Proxy
@@ -111,7 +126,7 @@ createNewUser name email age occupation = do
 -- static web filepath
 worldwideweb :: FilePath
 worldwideweb = "static"
-
+{-
 -- returns the paths of the api, with the json objects that they
 server :: Maybe (TVar Counter) -> Server UserAPI
 server counter = return users
@@ -125,3 +140,11 @@ server' :: OIDCEnv -> Maybe (TVar Counter) -> Server UserAPI'
 server' oidcEnv counter = server counter
     :<|> serveOIDC oidcEnv handleOIDCLogin
     :<|> serveDirectoryFileServer worldwideweb
+-}
+
+server'' :: OIDCEnv -> Server API
+server'' oidcEnv = serveOIDC oidcEnv handleOIDCLogin
+               :<|> return Homepage
+
+app'' :: OIDCEnv -> Application
+app'' oidcEnv = serve api (server'' oidcEnv)
