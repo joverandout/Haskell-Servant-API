@@ -12,7 +12,7 @@ import DataTypes
 import Database
 
 import Network.Wai
-import Network.Wai.Handler.Warp ( withApplication )
+import Network.Wai.Handler.Warp ( withApplication, run)
 
 import Servant
 import Servant.JS
@@ -82,12 +82,16 @@ startApp = do
   --writeJSForAPI userAPI vanillaJS (worldwideweb </> "api.js")
   counter <- newCounter
   oidcEnv <- initOIDC oidcConf
+  run 8080 (app'' oidcEnv)
+  {-
   withApplication (pure $ app'' oidcEnv) $ \port -> do
   --withApplication (pure $ app oidcEnv (Just counter)) $ \port -> do
         putStrLn $ printf "Started on http://localhost:%d (CMD Click)" port
         putStrLn "Press enter to quit."
         ch <- getChar
         print ch
+
+-}
 
 {-
 app :: OIDCEnv -> Maybe (TVar Counter) -> Application
